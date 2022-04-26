@@ -51,10 +51,23 @@ def escaner_nmap_tipo1():
     print("python-nmap")
 
     target = input("Ingrese direccion IP o rango a escanear: ")
-    tipo_escaneo = input("Ingrese el tipo de escaneo: ej: -n -sV -sC -p ")
+
+    tipo_escaneo_text = "Ingrese el tipo de escaneo: \n"
+    opcion1 = "1. -sV \n"
+    opcion2 = "2. -sC \n"
+    opcion3 = "3. Disable DNS resolution (-n) \n "
+    tipo_escaneo = input(tipo_escaneo_text + opcion1 + opcion2 + opcion3)
+
     ports = input("Ingrese los puertos o rango a escanear: ")
 
-    nmap_arguments = tipo_escaneo + ports
+    if tipo_escaneo == "1":
+        nmap_arguments = "-sV -p " + ports
+    elif tipo_escaneo == "2":
+        nmap_arguments = "-sC -p " + ports
+    elif tipo_escaneo == "3":
+        nmap_arguments = "-n -p " + ports
+    else:
+        print("Ingrese una de las opciones del menú")
 
     scanner = nmap.PortScanner()
     results = scanner.scan(hosts=target, arguments=nmap_arguments)
@@ -84,21 +97,35 @@ def escaner_nmap3_tipo2():
     """
     print("python3-nmap")
     target = input("Ingrese direccion IP o rango a escanear: ")
-    tipo_escaneo = input("Ingrese el tipo de escaneo: ej: -n -sV -sC -p ")
-    ports = input("Ingrese los puertos o rango a escanear: ")
+    #tipo_escaneo = input("Ingrese el tipo de escaneo: ej: -n -sV -sC -p ")
 
-    print(target)
-    print(tipo_escaneo)
-    print(ports)
+    tipo_escaneo_text = "Ingrese el tipo de escaneo: \n"
+    opcion1 = "1. Only port scan (-Pn) \n"
+    opcion2 = "2. Only host discover (-sn) \n"
+    opcion3 = "3. Arp discovery on a local network (-PR) \n"
+    opcion4 = "4. Disable DNS resolution (-n) \n "
+    tipo_escaneo = input(tipo_escaneo_text + opcion1 + opcion2 + opcion3 + opcion4)
+
+    ports = "-p" + input("Ingrese los puertos o rango a escanear: ej: 1-100 [1..100], 443 [443]: ")
+
     scanner = nmap3.Nmap()
-    results = scanner.scan_top_ports(target)
+    #results = scanner.scan_top_ports(target)
 
-    json_formatted = json.dumps(results, indent = 2)
+    scanner = nmap3.NmapHostDiscovery()
+    if tipo_escaneo == "1":
+        portscan_results = scanner.nmap_portscan_only(target, args=ports) #portscan_only
+    elif tipo_escaneo == "2":
+        portscan_results = scanner.nmap_no_portscan(target, args=ports) #no_portscan
+    elif tipo_escaneo == "3":
+        portscan_results = scanner.nmap_arp_discovery(target, args=ports)
+    elif tipo_escaneo == "4":
+        portscan_results = scanner.nmap_disable_dns(target, args=ports)
+    else:
+        print("Ingrese una de las opciones del menú")
+
+    print(portscan_results)
+    json_formatted = json.dumps(portscan_results, indent = 2)
     print(json_formatted)
-
-    print("========= TOP PORTS ==========")
-    print(results)
-    print("==============================\n")
     write_csv(json_formatted)
 
 def banner():
