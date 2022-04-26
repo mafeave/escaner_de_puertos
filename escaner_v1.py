@@ -45,6 +45,7 @@ target = input("Ingrese direccion IP o rango a escanear: ")
 ports = input("Ingrese los puertos o rango a escanear: ")
 scanner = nmap.PortScanner()
 NMAP_ARGUMENTS = "-n -sV -sC -p " + str(ports)
+#nm.scan(hosts='192.168.1.10/24', arguments='-n -sP -PE -PA21,23,80,3389')
 results = scanner.scan(hosts=target, arguments=NMAP_ARGUMENTS)
 print(results)
 
@@ -66,3 +67,5 @@ for host in scanner.all_hosts():
 
 print("Exporting results to CSV file...")
 write_csv(scanner.csv())
+
+#scaninfo: nm.scaninfo()
