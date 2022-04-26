@@ -8,6 +8,6 @@ Instalación
 ```bash
 cd escaner_de_puertos/
 chmod +x desafio1_port_scanner.py
-sudo pip3 install -r requirement.txt
+sudo pip3 install -r requirements.txt
 python3 desafio1_port_scanner.py ó ./desafio1_port_scanner.py
 ```
